@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gratis Afbeeldingen Generator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+      background-color: #f4f4f9;
+      color: #333;
+    }
+
+    h1 {
+      margin-bottom: 10px;
+    }
+
+    p {
+      margin-top: 0;
+      color: #666;
+    }
+
+    canvas {
+      border: 3px solid #333;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+      background-color: #ffffff;
+      margin-bottom: 20px;
+    }
+
+    .controls {
+      display: flex;
+      gap: 10px;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      font-weight: bold;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+
+    .btn-generate {
+      background-color: #007bff;
+      color: white;
+    }
+
+    .btn-generate:hover {
+      background-color: #0056b3;
+    }
+
+    .btn-download {
+      background-color: #28a745;
+      color: white;
+    }
+
+    .btn-download:hover {
+      background-color: #1e7e34;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Eigen Kunst Generator</h1>
+  <p>Genereer unieke patronen en sla ze gratis op als afbeelding.</p>
+
+  <!-- Het canvas waarop de afbeelding getekend wordt -->
+  <canvas id="myCanvas" width="500" height="500"></canvas>
+
+  <div class="controls">
+    <button class="btn-generate" onclick="generateArt()">Nieuwe Afbeelding</button>
+    <button class="btn-download" onclick="downloadImage()">Download PNG</button>
+  </div>
+
+  <script>
+    const canvas = document.getElementById('myCanvas');
+    const ctx = canvas.getContext('2d');
+
+    // Functie om een willekeurige kleur te maken
+    function getRandomColor() {
+      const letters = '0123456789ABCDEF';
+      let color = '#';
+      for (let i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+      }
+      return color;
+    }
+
+    // Functie om de afbeelding te genereren
+    function generateArt() {
+      // Achtergrond wissen en een verloop (gradient) geven
+      const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+      gradient.addColorStop(0, getRandomColor());
+      gradient.addColorStop(1, getRandomColor());
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // Genereer willekeurige cirkels en vormen
+      const numberOfShapes = 25;
+      for (let i = 0; i < numberOfShapes; i++) {
+        ctx.beginPath();
+        const x = Math.random() * canvas.width;
+        const y = Math.random() * canvas.height;
+        const radius = Math.random() * 80 + 10;
+
+        ctx.arc(x, y, radius, 0, Math.PI * 2);
+        ctx.fillStyle = getRandomColor();
+        ctx.globalAlpha = Math.random() * 0.7 + 0.3; // Transparantie
+        ctx.fill();
+        ctx.lineWidth = Math.random() * 4;
+        ctx.strokeStyle = getRandomColor();
+        ctx.stroke();
+      }
+
+      // Voeg een tekst-watermerk of stempel toe
+      ctx.globalAlpha = 1.0;
+      ctx.font = '20px Arial';
+      ctx.fillStyle = '#ffffff';
+      ctx.shadowColor = 'rgba(0,0,0,0.5)';
+      ctx.shadowBlur = 4;
+      ctx.fillText('Gemaakt op GitHub Pages', 20, canvas.height - 20);
+      ctx.shadowBlur = 0; // Reset schaduw
+    }
+
+    // Functie om de afbeelding direct op de computer van de gebruiker op te slaan
+    function downloadImage() {
+      const link = document.createElement('a');
+      link.download = 'mijn-afbeelding.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    }
+
+    // Genereer meteen een kunstwerk zodra de pagina laadt
+    window.onload = generateArt;
+  </script>
+
+</body>
+</html>
